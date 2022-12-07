@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
 
 function App() {
@@ -21,10 +21,24 @@ function App() {
   };
   // getBoundingClientRect() = > x y h w olarak
   // bütün değerleri ayrıntılı olarak verir
+  const ref = useRef()
 
+  useEffect(() => {
+    const el = ref.current.querySelector(".active")
+    const {top, width, height } = el.getBoundingClientRect();
+    const left = el.offsetLeft
+    setPosition({
+      left,
+      top,
+      width,
+      height,
+    });
+
+  }, [])
+  
   return (
     <div>
-      <nav className="menu">
+      <nav className="menu" ref={ref}>
         {Object.values(position).length > 0 && (
           <div
             className="divider"
@@ -36,7 +50,7 @@ function App() {
             }}
           ></div>
         )}
-        <button onClick={clickHandle}>Hakkımda</button>
+        <button onClick={clickHandle} className="active">Hakkımda</button>
         <button onClick={clickHandle}>iletişim</button>
         <button onClick={clickHandle}>Blog</button>
         <button onClick={clickHandle}>Makaleler</button>
