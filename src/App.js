@@ -1,17 +1,18 @@
 import { useEffect, useRef, useState } from "react";
+import Menu from "./component/menu";
 import "./App.css";
 
 function App() {
   const [position, setPosition] = useState({});
 
   const clickHandle = (e) => {
-    const {top, width, height } = e.target.getBoundingClientRect();
-    // navbar ekranın ortasından yarını kaplıyo diyelim o zaman bu left değeri bozulacak
+    const { top, width, height } = e.target.getBoundingClientRect();
+    // navbar ekranın ortasından yarısını kaplıyo diyelim o zaman bu left değeri bozulacak
     // çünkü bu komple ekrana göre alıyor
     // bu yüzden lefti offsetleft ile alcaz
     // bu sayede kapsayıcıya göre left değeri almış olcaz
 
-    const left = e.target.offsetLeft
+    const left = e.target.offsetLeft;
     setPosition({
       left,
       top,
@@ -21,23 +22,30 @@ function App() {
   };
   // getBoundingClientRect() = > x y h w olarak
   // bütün değerleri ayrıntılı olarak verir
-  const ref = useRef()
+  const ref = useRef();
 
   useEffect(() => {
-    const el = ref.current.querySelector(".active")
-    const {top, width, height } = el.getBoundingClientRect();
-    const left = el.offsetLeft
+    const el = ref.current.querySelector(".active");
+    const { top, width, height } = el.getBoundingClientRect();
+    const left = el.offsetLeft;
     setPosition({
       left,
       top,
       width,
       height,
     });
+  }, []);
 
-  }, [])
-  
   return (
     <div>
+      <Menu>
+        <Menu.Item>Hakkımda</Menu.Item>
+        <Menu.Item>iletişim</Menu.Item>
+        <Menu.Item>Blog</Menu.Item>
+        <Menu.Item>Makaleler</Menu.Item>
+        <Menu.Item>Dersler</Menu.Item>
+      </Menu>
+
       <nav className="menu" ref={ref}>
         {Object.values(position).length > 0 && (
           <div
@@ -50,11 +58,6 @@ function App() {
             }}
           ></div>
         )}
-        <button onClick={clickHandle} className="active">Hakkımda</button>
-        <button onClick={clickHandle}>iletişim</button>
-        <button onClick={clickHandle}>Blog</button>
-        <button onClick={clickHandle}>Makaleler</button>
-        <button onClick={clickHandle}>Dersler</button>
       </nav>
     </div>
   );
