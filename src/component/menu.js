@@ -1,14 +1,30 @@
-import { useState, createContext, useContext} from "react";
+import { useState, createContext, useContext, useEffect, useRef} from "react";
 
 const MenuContext = createContext();
 
 const Menu = ({ children }) => {
   const [position, setPosition] = useState({});
+  const ref = useRef()
+
+  useEffect(() => {
+    console.log(ref)
+    const el = ref.current.querySelector('.active')
+    const { top, width, height } = el.getBoundingClientRect();
+    const left = el.offsetLeft;
+    setPosition({
+      left,
+      top,
+      width,
+      height,
+    });
+  }, [])
+  
+
   return (
     <MenuContext.Provider value={{ setPosition, position }}>
-      <nav className="menu">
+      <nav className="menu" ref={ref}>
         {children}
-        <Menu.Divider />
+        {Object.values(position).length >0 && <Menu.Divider />}
       </nav>
     </MenuContext.Provider>
   );
@@ -30,13 +46,13 @@ Menu.Divider = () => {
   );
 };
 
-Menu.Item = ({ children }) => {
+Menu.Item = ({ children , className}) => {
 
   const {setPosition} = useContext(MenuContext);
 
   const clickHandle = (e) => {
-    const { top, width, height } = e.getBoundingClientRect();
-    const left = e.offsetLeft;
+    const { top, width, height } = e.target.getBoundingClientRect();
+    const left = e.target.offsetLeft;
     setPosition({
       left,
       top,
@@ -44,7 +60,7 @@ Menu.Item = ({ children }) => {
       height,
     });
   };
-  return <button onClick={clickHandle}>{children}</button>;
+  return <button className={className} onClick={clickHandle}>{children}</button>;
 };
 
 export default Menu

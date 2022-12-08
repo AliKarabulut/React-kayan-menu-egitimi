@@ -10,7 +10,7 @@ function App() {
   return (
     <div>
       <Menu>
-        <Menu.Item>Hakkımda</Menu.Item>
+        <Menu.Item className="active">Hakkımda</Menu.Item>
         <Menu.Item>iletişim</Menu.Item>
         <Menu.Item>Blog</Menu.Item>
         <Menu.Item>Makaleler</Menu.Item>
